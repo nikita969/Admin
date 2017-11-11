@@ -6,15 +6,24 @@
 package Gui;
 
 import controller.SysAdmin;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import view.School;
 import view.Student;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
  * @author nikitaivancov
+ * 
+ * 
  */
 public class Admin extends javax.swing.JFrame {
 
@@ -30,8 +39,34 @@ public class Admin extends javax.swing.JFrame {
         jTable1.setModel(model);
         Object[] column = {"ID","Fisrt Name","Last Name","Grade"};
         model.setColumnIdentifiers(column);
+        initiaListening();
+    }
+    
+    private void  initiaListening(){
+      jTable1.getTableHeader().addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseClicked(MouseEvent mouseEvent) {
+         String str = jComboBox1.getSelectedItem().toString();
+         TableColumnModel cModel = jTable1.getColumnModel();//cModel - column model
+         int selColumn = cModel.getColumnIndexAtX(mouseEvent.getX());
+         if(selColumn != 0 || str.equals(""))
+             return;
+        School sch=admin.getSchool(str);
+        ArrayList<Student> st = sch.getStudents();
+        Collections.sort(st, new Comparator<Student>(){
+        public int compare(Student o1, Student o2){
+        return Integer.parseInt(o1.getID()) - Integer.parseInt(o2.getID());
+         }
+        });
+        model.setNumRows(0);
+        tableLoad(st);
+      };
+    });
     }
 
+    public void mouseClicked(MouseEvent mouseEvent) {
+    }
+    
     private void FillCombox(){
         ArrayList<School> sc=admin.getSchools();
         jComboBox1.addItem("");
@@ -39,6 +74,8 @@ public class Admin extends javax.swing.JFrame {
             jComboBox1.addItem(sc.get(i).getSchoolName());
         }
     }
+    
+    
     
     
     
@@ -142,6 +179,11 @@ public class Admin extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable1);
 
         addBtn.setBackground(new java.awt.Color(0, 242, 207));
@@ -264,8 +306,12 @@ public class Admin extends javax.swing.JFrame {
        if(jComboBox1.getSelectedItem().toString().equals(""))
            return;
          sch = admin.getSchool(jComboBox1.getSelectedItem().toString());
-         System.out.println(sch.getSchoolName());
          ArrayList<Student> st = sch.getStudents();
+         tableLoad(st);
+        
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void tableLoad(ArrayList<Student> st){
         for(int i=0; i<st.size(); i++){
           Object[] row = new Object[4];
           row[0] = st.get(i).getID();
@@ -274,9 +320,8 @@ public class Admin extends javax.swing.JFrame {
           row[3] = st.get(i).getGrade();
           model.addRow(row); 
        } 
-        
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
+    } 
+    
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
        if(jComboBox1.getSelectedItem().toString() == ""){
             JOptionPane.showMessageDialog(null, "Choose a school");
@@ -318,6 +363,23 @@ public class Admin extends javax.swing.JFrame {
        JOptionPane.showMessageDialog(null, "Student with ID :" + removeID+ " was sucessfully removed");
     }//GEN-LAST:event_jToggleButton3ActionPerformed
 
+      
+   
+    
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+       String str = jComboBox1.getSelectedItem().toString();
+        School sch=admin.getSchool(str);
+        ArrayList<Student> st = sch.getStudents();
+        Collections.sort(st, new Comparator<Student>(){
+        public int compare(Student o1, Student o2){
+        return Integer.parseInt(o1.getID()) - Integer.parseInt(o2.getID());
+           }
+        });
+      
+      
+        
+    }//GEN-LAST:event_jTable1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -358,6 +420,10 @@ public class Admin extends javax.swing.JFrame {
             }
         });
     }
+    
+   
+    
+    
    private DefaultTableModel model;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField IDText;
@@ -379,4 +445,6 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton3;
     private javax.swing.JTextField lastNameTxt;
     // End of variables declaration//GEN-END:variables
+
+
 }
