@@ -299,8 +299,7 @@ public class Admin extends javax.swing.JFrame {
        row[0] = ID; row[1] = name; row[2] = name; row[3] = st.getGrade();
        model.addRow(row);
        admin.addStudent(str, st);
-       if(IDText.getText().equals("") || NameTxt.getText().equals("") || lastNameTxt.getText().equals(""))
-             JOptionPane.showMessageDialog(null, "Fill all the fields");
+      
        
        IDText.setText("");
        NameTxt.setText("");
@@ -311,7 +310,7 @@ public class Admin extends javax.swing.JFrame {
        String schoolName;
        int row =-1;
        if((schoolName = jComboBox1.getSelectedItem().toString()).equals("") || (row = jTable1.getSelectedRow()) == -1){
-          JOptionPane.showMessageDialog(null, "choose the student you want to remove");
+          JOptionPane.showMessageDialog(null, "choose a student you want to remove");
           return;
      }
        String removeID =  model.getValueAt(row,0).toString();
