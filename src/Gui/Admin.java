@@ -299,11 +299,10 @@ public class Admin extends javax.swing.JFrame {
        row[0] = ID; row[1] = name; row[2] = name; row[3] = st.getGrade();
        model.addRow(row);
        admin.addStudent(str, st);
-      
-       
        IDText.setText("");
        NameTxt.setText("");
-       lastNameTxt.setText("");   
+       lastNameTxt.setText("");  
+       JOptionPane.showMessageDialog(null, "Student with ID :" + ID + " was sucessfully added");
     }//GEN-LAST:event_addBtnActionPerformed
 
     private void jToggleButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
